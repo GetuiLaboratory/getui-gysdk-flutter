@@ -15,7 +15,7 @@ flutter pub add gyflut
 
 ```yaml
 dependencies:
-  gyflut: ^0.0.1
+  gyflut: ^0.0.2
 ```
 下载依赖：
 
@@ -36,13 +36,13 @@ import 'package:gyflut/gyflut.dart';
 
 ```dart
 
-/**
+  /**
 	*
 	*初始化SDK
 	* @param preLoginUseCache:预登录是否使用缓存，默认为true
 	* @param debug:是否开启SDK的debug模式，默认false
 	* @param operatorDebug:是否开启运营商的debug模式，默认false
-	*/
+    */
  void initGySdk([bool? preLoginUseCache, bool? debug, bool? operatorDebug])
 
 /**
