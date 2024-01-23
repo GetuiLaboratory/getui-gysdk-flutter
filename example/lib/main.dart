@@ -106,12 +106,14 @@ class _MyAppState extends State<MyApp> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () {
-                          /**
-                               * preLoginUseCache:预登录是否使用缓存，默认为true
-                               * debug:是否开启SDK的debug模式，默认false
-                               * operatorDebug:是否开启运营商的debug模式，默认false
-                               */
-                          Gyflut().initGySdk(true, false, false);
+                          /// preLoginUseCache:预登录是否使用缓存，默认为true
+                          /// debug:是否开启SDK的debug模式，默认false
+                          /// operatorDebug:是否开启运营商的debug模式，默认false
+                          /// appId: appid（ios)
+                          /// preLoginTimeout: 预登录超时时长（ios)
+                          /// eloginTimeout:登录超时时长（ios)
+                          Gyflut().initGySdk(
+                              true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
                         },
                         child: const Text('初始化'),
                       ),

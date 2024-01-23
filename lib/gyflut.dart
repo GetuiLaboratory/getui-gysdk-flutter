@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -30,7 +31,6 @@ class Gyflut {
   }
 
   Future _handleMethod(MethodCall call) async {
-
     switch (call.method) {
       case "initGySdkCallBack":
         return _initGySdkCallBack(call.arguments.cast<String, dynamic>());
@@ -43,28 +43,50 @@ class Gyflut {
     }
   }
 
-  /**
-   * preLoginUseCache:预登录是否使用缓存，默认为true
-   * debug:是否开启SDK的debug模式，默认false
-   * operatorDebug:是否开启运营商的debug模式，默认false
-   */
-  void initGySdk([bool? preLoginUseCache, bool? debug, bool? operatorDebug]) {
-    _channel.invokeMethod('init', {
-      "preLoginUseCache": preLoginUseCache,
-      "debug": debug,
-      "operatorDebug": operatorDebug
-    });
+  /// preLoginUseCache:预登录是否使用缓存，默认为true
+  /// debug:是否开启SDK的debug模式，默认false
+  /// operatorDebug:是否开启运营商的debug模式，默认false
+  /// appId: appid（ios)
+  /// preLoginTimeout: 预登录超时时长（ios)
+  /// eloginTimeout:登录超时时长（ios)
+  void initGySdk(
+      [bool? preLoginUseCache,
+      bool? debug,
+      bool? operatorDebug,
+      String? appId,
+      Int? preLoginTimeout,
+      Int? eloginTimeout]) {
+    if (Platform.isAndroid) {
+      _channel.invokeMethod('init', {
+        "preLoginUseCache": preLoginUseCache,
+        "debug": debug,
+        "operatorDebug": operatorDebug
+      });
+    } else {
+      _channel.invokeMethod('init', {
+        "appId": appId,
+        "debug": debug,
+        "preLoginTimeout": preLoginTimeout ?? 10,
+        "eloginTimeout": eloginTimeout ?? 10
+      });
+    }
   }
 
   void ePreLogin([int? timeout]) {
-
-    _channel.invokeMethod('ePreLogin', {"timeout": timeout});
+    if (Platform.isAndroid) {
+      _channel.invokeMethod('ePreLogin', {"timeout": timeout});
+    } else {
+      _channel.invokeMethod('ePreLogin', {});
+    }
   }
 
   void login([int? timeout]) {
-    _channel.invokeMethod('login', {"timeout": timeout});
+    if (Platform.isAndroid) {
+      _channel.invokeMethod('login', {"timeout": timeout});
+    } else {
+      _channel.invokeMethod('login', {});
+    }
   }
-
 
   Future<bool?> isPreLoginResultValid() async {
     final bool? result = await _channel.invokeMethod('isPreLoginResultValid');

@@ -3,3 +3,6 @@
 
 ## 0.0.2
 isPreLoginResultValid 、 getPreLoginResult 返回值变换
+
+## 0.0.3
+适配iOS GYSDK
