@@ -1,6 +1,6 @@
 name: gyflut
 description: gy flutter plugin
-version: 0.0.2
+version: 0.0.4
 homepage: https://www.getui.com
 
 environment:
@@ -30,7 +30,8 @@ flutter:
       android:
         package: com.getui.gy.gyflut
         pluginClass: GysdkFlutterPlugin
-
+      ios:
+        pluginClass: GysdkFlutterPlugin
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

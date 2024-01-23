@@ -1,0 +1,37 @@
+PODS:
+  - Flutter (1.0.0)
+  - GTCommonSDK (3.0.9.0):
+    - ZXSDK
+  - gyflut (0.0.1):
+    - Flutter
+    - GYSDK
+  - GYSDK (3.0.5.0):
+    - GTCommonSDK (>= 3.0.0.0)
+  - ZXSDK (3.2.4)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - gyflut (from `.symlinks/plugins/gyflut/ios`)
+
+SPEC REPOS:
+  trunk:
+    - GTCommonSDK
+    - GYSDK
+    - ZXSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  gyflut:
+    :path: ".symlinks/plugins/gyflut/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  GTCommonSDK: 44e0656b734aa80e7576c1a687bf351633f5d324
+  gyflut: 6d040e63699c15966d360fb4b8a904b56405f9bd
+  GYSDK: ca742e929db8e65c5a20d4beb4288f23003f898e
+  ZXSDK: 145a89f90f11e18e4fe62fe43175a60ade342ba8
+
+PODFILE CHECKSUM: 663715e941f9adb426e33bf9376914006f9ea95b
+
+COCOAPODS: 1.12.1
