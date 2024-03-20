@@ -89,7 +89,17 @@ allprojects {
     }
 }
 ```
-
+## 2.2 IOS配置
+在你项目的main.dart中添加下列代码：
+```dart
+/// preLoginUseCache:预登录是否使用缓存，默认为true
+/// debug:是否开启SDK的debug模式，默认false
+/// operatorDebug:是否开启运营商的debug模式，默认false
+/// appId: appid（ios)
+/// preLoginTimeout: 预登录超时时长（ios)
+/// eloginTimeout:登录超时时长（ios)
+ Gyflut().initGySdk(true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
+```
 
 
 #  3、使用
@@ -128,8 +138,15 @@ Gyflut().login();
 
 
 
-### 3.2 demo
+### 3.2 Android demo
 
 https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
 
 ![demo](demo.png)
+
+
+### 3.2 IOS demo
+
+https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
+
+<img src="iosDemo.png" alt="iosDemo.png" style="zoom:50%;" />
