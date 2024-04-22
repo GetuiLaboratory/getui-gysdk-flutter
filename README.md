@@ -9,7 +9,7 @@ Pub.dev: https://pub.dev/packages/gyflut
 
 ```yaml
 dependencies:
-  gyflut: ^0.0.4
+  gyflut: ^0.0.5
 ```
 
 
@@ -149,4 +149,4 @@ https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
 
 https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
 
-<img src="iosDemo.png" alt="iosDemo.png" style="zoom:50%;" />
+![demo](iosDemo.png)

@@ -9,3 +9,6 @@ isPreLoginResultValid 、 getPreLoginResult 返回值变换
 
 ## 0.0.4
 适配iOS GYSDK
+
+## 0.0.5
+提高dart版本范围
