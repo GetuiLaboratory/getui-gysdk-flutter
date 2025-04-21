@@ -39,14 +39,13 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     private static final int FLUTTER_CALL_BACK_INIT = 1;
     private static final int FLUTTER_CALL_BACK_PRELOGIN = 2;
     private static final int FLUTTER_CALL_BACK_LOGIN = 3;
-    public static GysdkFlutterPlugin instance;
 
-    public GysdkFlutterPlugin() {
-        instance = this;
-    }
+    public  static  String TAG = "GysdkFlutterPlugin";
+
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        Log.d(TAG,"onAttachedToEngine ");
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "gyflut");
         channel.setMethodCallHandler(this);
         fContext = flutterPluginBinding.getApplicationContext();
@@ -59,6 +58,7 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+        Log.d(TAG,""+call.method);
         if (call.method.equals("getPlatformVersion")) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         } else if (call.method.equals("init")) {
@@ -66,8 +66,10 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals("ePreLogin")) {
             Integer time = call.argument("timeout");
             ePreLogin(time);
+            result.success(null);
         } else if (call.method.equals("login")) {
             login(call.argument("timeout"));
+            result.success(null);
         } else if (call.method.equals("isPreLoginResultValid")) {
             boolean preLoginResultValid = isPreLoginResultValid();
             result.success(preLoginResultValid);
@@ -80,18 +82,21 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     }
 
 
-    private static Handler flutterHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler flutterHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
+            Log.d(TAG,"msg.what : "+ msg.what);
+
+
             switch (msg.what) {
                 case FLUTTER_CALL_BACK_PRELOGIN:
-                    GysdkFlutterPlugin.instance.channel.invokeMethod("preloginCallback", msg.obj);
+                   channel.invokeMethod("preloginCallback", msg.obj);
                     break;
                 case FLUTTER_CALL_BACK_INIT:
-                    GysdkFlutterPlugin.instance.channel.invokeMethod("initGySdkCallBack", msg.obj);
+                   channel.invokeMethod("initGySdkCallBack", msg.obj);
                     break;
                 case FLUTTER_CALL_BACK_LOGIN:
-                    GysdkFlutterPlugin.instance.channel.invokeMethod("loginCallBack", msg.obj);
+                   channel.invokeMethod("loginCallBack", msg.obj);
                     break;
                 default:
                     break;
@@ -176,6 +181,7 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
 
     private void transforMapSend(GYResponse response, int flutterType) {
+        Log.d(TAG,"flutterType : "+flutterType);
         HashMap<String, Object> map = new HashMap<>();
         map.put("isSuccess", response.isSuccess());
         map.put("msg", response.getMsg());

@@ -12,3 +12,6 @@ isPreLoginResultValid 、 getPreLoginResult 返回值变换
 
 ## 0.0.5
 提高dart版本范围
+
+## 0.0.6
+修复单利

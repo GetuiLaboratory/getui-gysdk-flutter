@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -31,6 +30,7 @@ class Gyflut {
   }
 
   Future _handleMethod(MethodCall call) async {
+    print( "_handleMethod"  + call.method );
     switch (call.method) {
       case "initGySdkCallBack":
         return _initGySdkCallBack(call.arguments.cast<String, dynamic>());
@@ -54,8 +54,7 @@ class Gyflut {
       bool? debug,
       bool? operatorDebug,
       String? appId,
-      Int? preLoginTimeout,
-      Int? eloginTimeout]) {
+      int? preLoginTimeout, int? eloginTimeout]) {
     if (Platform.isAndroid) {
       _channel.invokeMethod('init', {
         "preLoginUseCache": preLoginUseCache,
