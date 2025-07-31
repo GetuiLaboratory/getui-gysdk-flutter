@@ -175,6 +175,23 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         map.put("privacyName", response.getPrivacyName());
         map.put("privacyUrl", response.getPrivacyUrl());
         map.put("operator", response.getOperator());
+        //1.0.7补充
+        String slogan = "";
+        switch(response.getOperator()){
+            case "CM":
+                slogan = "中国移动提供认证服务";
+                break;
+            case "CU":
+                slogan = "认证服务由联通统一认证提供";
+                break;
+            case "CT":
+                slogan = "天翼账号提供认证服务";
+                break;
+            default:
+                break;
+        }
+
+        map.put("slogan", slogan);
 
         return map;
     }

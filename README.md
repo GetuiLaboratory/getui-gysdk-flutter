@@ -9,7 +9,7 @@ Pub.dev: https://pub.dev/packages/gyflut
 
 ```yaml
 dependencies:
-  gyflut: ^0.0.6
+  gyflut: ^0.0.7
 ```
 
 

@@ -15,3 +15,7 @@ isPreLoginResultValid 、 getPreLoginResult 返回值变换
 
 ## 0.0.6
 修复单利
+
+## 0.0.7
+Android增加getPreLoginResult slogan , 
+
