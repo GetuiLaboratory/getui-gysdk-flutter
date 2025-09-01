@@ -208,6 +208,9 @@ Map<dynamic, dynamic>? getPreLoginResult = await Gyflut().getPreLoginResult();
 
 //登录
 Gyflut().login();
+
+//关闭弹框(仅ohos)
+Gyflut().closeAuthLoginPage()
 ```
 
 
