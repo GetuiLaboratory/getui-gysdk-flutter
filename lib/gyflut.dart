@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/services.dart';
-
+import 'dart:convert';
 typedef Future<dynamic> EventHandler(String res);
 typedef Future<dynamic> EventHandlerMap(Map<String, dynamic> event);
 
@@ -13,7 +12,8 @@ class Gyflut {
   late EventHandlerMap _preloginCallback;
   late EventHandlerMap _loginCallBack;
 
-  static Future<String?> get platformVersion async {
+
+  Future<String?> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
@@ -30,14 +30,20 @@ class Gyflut {
   }
 
   Future _handleMethod(MethodCall call) async {
-    print( "_handleMethod"  + call.method );
+    print( "_handleMethod method:"  + call.method );
+    dynamic result;
+    if (call.arguments is String) {
+      result = jsonDecode(call.arguments) as Map<String, dynamic>;
+    } else {
+      result = call.arguments.cast<String, dynamic>();
+    }
     switch (call.method) {
       case "initGySdkCallBack":
-        return _initGySdkCallBack(call.arguments.cast<String, dynamic>());
+        return _initGySdkCallBack(result);
       case "preloginCallback":
-        return _preloginCallback(call.arguments.cast<String, dynamic>());
+        return _preloginCallback(result);
       case "loginCallBack":
-        return _loginCallBack(call.arguments.cast<String, dynamic>());
+        return _loginCallBack(result);
       default:
         throw UnsupportedError("Unrecongnized Event");
     }
@@ -55,37 +61,42 @@ class Gyflut {
       bool? operatorDebug,
       String? appId,
       int? preLoginTimeout, int? eloginTimeout]) {
-    if (Platform.isAndroid) {
-      _channel.invokeMethod('init', {
-        "preLoginUseCache": preLoginUseCache,
-        "debug": debug,
-        "operatorDebug": operatorDebug
-      });
-    } else {
+    if (Platform.isIOS) {
       _channel.invokeMethod('init', {
         "appId": appId,
         "debug": debug,
         "preLoginTimeout": preLoginTimeout ?? 10,
         "eloginTimeout": eloginTimeout ?? 10
       });
+    } else {
+      _channel.invokeMethod('init', {
+        "preLoginUseCache": preLoginUseCache,
+        "debug": debug,
+        "operatorDebug": operatorDebug
+      });
     }
   }
 
   void ePreLogin([int? timeout]) {
-    if (Platform.isAndroid) {
-      _channel.invokeMethod('ePreLogin', {"timeout": timeout});
-    } else {
+    if (Platform.isIOS) {
       _channel.invokeMethod('ePreLogin', {});
+    } else {
+      _channel.invokeMethod('ePreLogin', {"timeout": timeout});
     }
   }
 
   void login([int? timeout]) {
-    if (Platform.isAndroid) {
-      _channel.invokeMethod('login', {"timeout": timeout});
-    } else {
+    if (Platform.isIOS) {
       _channel.invokeMethod('login', {});
+    } else {
+      _channel.invokeMethod('login', {"timeout": timeout});
     }
   }
+  void closeAuthLoginPage() {
+    //鸿蒙关闭一键登录弹框
+    _channel.invokeMethod('closeAuthLoginPage', {});
+  }
+
 
   Future<bool?> isPreLoginResultValid() async {
     final bool? result = await _channel.invokeMethod('isPreLoginResultValid');
@@ -93,8 +104,12 @@ class Gyflut {
   }
 
   Future<Map<dynamic, dynamic>?> getPreLoginResult() async {
-    final Map<dynamic, dynamic>? result =
-        await _channel.invokeMethod('getPreLoginResult');
+    dynamic result =  await _channel.invokeMethod('getPreLoginResult');
+    if (result is String) {
+      result = jsonDecode(result) as Map<String, dynamic>;
+    } else {
+      result = result.cast<String, dynamic>();
+    }
     return result;
   }
 }

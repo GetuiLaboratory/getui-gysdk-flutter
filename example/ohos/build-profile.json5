@@ -1,0 +1,57 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/yangsihao/.ohos/config/default_ohos_4iT231CgBCSFn_AgwldLTxcmZ5iFRUSuXZHN3WGL4ZQ=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BD3549E1FBA98582E53ABD8E23181831F80F4AE8F3BD8A939B9651FBB78AED036E427BF797AF457",
+          "profile": "/Users/yangsihao/.ohos/config/default_ohos_4iT231CgBCSFn_AgwldLTxcmZ5iFRUSuXZHN3WGL4ZQ=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/yangsihao/.ohos/config/default_ohos_4iT231CgBCSFn_AgwldLTxcmZ5iFRUSuXZHN3WGL4ZQ=.p12",
+          "storePassword": "0000001B386B648FCBB6F0A60FA6A7ABF024C19883BF29C986B50650FD85163BCE6F3A2E788673AAD762F8"
+        }
+      },
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "你的签名信息",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "profile"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

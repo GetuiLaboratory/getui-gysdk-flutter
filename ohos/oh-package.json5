@@ -1,0 +1,11 @@
+{
+  "name": "gyflut",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@getui/gysdk": "file:./libs/GY-HM-1.0.8.har"
+  }
+}

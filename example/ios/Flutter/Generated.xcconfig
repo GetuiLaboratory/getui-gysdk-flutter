@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/yangsihao/Downloads/flutter
-FLUTTER_APPLICATION_PATH=/Users/yangsihao/Downloads/AndroidStudioProjects/getuiSDk/flutter/gy/githup-gy-flutter-plugin/getui-gysdk-flutter/example
+FLUTTER_ROOT=/Users/yangsihao/fvm/versions/3.22.1-ohos-1.0.4
+FLUTTER_APPLICATION_PATH=/Users/yangsihao/Downloads/AndroidStudioProjects/plugins/flutter/gy/githup-gy-flutter-plugin/getui-gysdk-flutter/example
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

@@ -31,3 +31,6 @@ example/ios/Runner.xcworkspace/xcuserdata
 example/ios/Runner.xcodeproj/xcshareddata
 example/ios/Index
 example/ios/Pods
+
+# FVM Version Cache
+.fvm/

@@ -6,9 +6,6 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-    }
 }
 
 rootProject.allprojects {
@@ -25,7 +22,8 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 31
-    namespace 'com.getui.gy.gysdk_flutter_plugin'
+    namespace 'com.getui.gy.gyflut'
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -37,5 +35,5 @@ android {
 }
 dependencies {
     // 个验sdk
-    implementation 'com.getui:gysdk:3.1.0.0'
+    implementation 'com.getui:gysdk:3.2.0.0'
 }

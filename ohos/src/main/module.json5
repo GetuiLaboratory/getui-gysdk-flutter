@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "gyflut",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

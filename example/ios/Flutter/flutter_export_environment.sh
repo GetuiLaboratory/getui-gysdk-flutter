@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/yangsihao/Downloads/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/yangsihao/Downloads/AndroidStudioProjects/getuiSDk/flutter/gy/githup-gy-flutter-plugin/getui-gysdk-flutter/example"
+export "FLUTTER_ROOT=/Users/yangsihao/fvm/versions/3.22.1-ohos-1.0.4"
+export "FLUTTER_APPLICATION_PATH=/Users/yangsihao/Downloads/AndroidStudioProjects/plugins/flutter/gy/githup-gy-flutter-plugin/getui-gysdk-flutter/example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

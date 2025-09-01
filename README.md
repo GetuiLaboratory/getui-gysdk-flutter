@@ -9,7 +9,7 @@ Pub.dev: https://pub.dev/packages/gyflut
 
 ```yaml
 dependencies:
-  gyflut: ^0.0.7
+  gyflut: ^0.0.8
 ```
 
 
@@ -67,10 +67,10 @@ signingConfigs {
 ```groovy
 dependencies {
     //-----集成个验SDK-----
-    // 个推基础库
-    implementation 'com.getui:gtc:3.2.1.0'
-    // 个验sdk
-    implementation 'com.getui:gysdk:3.1.0.0'
+    //一键认证sdk
+    implementation 'com.getui:gysdk:3.2.0.0'
+    //个推公共库，如已接其他个推sdk则保留一个最高版本即可
+    implementation 'com.getui:gtc:3.2.18.0'
 }
 ```
 
@@ -100,6 +100,80 @@ allprojects {
 /// eloginTimeout:登录超时时长（ios)
  Gyflut().initGySdk(true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
 ```
+
+
+## 2.3 ohos配置
+* 使用鸿蒙定制版 Flutter，下载地址: [OpenHarmony Flutter](https://gitcode.com/openharmony-tpc/flutter_flutter) 及 [使用教程](https://developer.huawei.com/consumer/cn/blog/topic/03178381351651116)。
+* ohos工程需要兼容字节码包,在项目级build-profile.json5:
+* ohos工程需要配置正确的签名信息,在项目级build-profile.json5:
+```yaml
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "签名信息",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+```
+## 2.4 ohos UI配置
+ohos需要原生UI的配置项,参考demo中Index.ets 和 EntryAbility.ets
+
+```dart
+//--------------entryAbility类-------------------
+ private  static  entryAbility :EntryAbility|null
+
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    EntryAbility.entryAbility = this
+    super.onCreate(want, launchParam)
+  }
+
+    public  static  getInstanse(): EntryAbility|null {
+       return EntryAbility.entryAbility
+    }
+
+    onDestroy(): void {
+      super.onDestroy()
+      EntryAbility.entryAbility = null
+    }
+//----------------Index类-----------------
+private readonly  dialogController: CustomDialogController //省略 ......
+
+aboutToAppear(): void {
+//使用弹框模式
+//this.config.setWindowMode(this.dialogController)
+//this.config.setLogoMargin({ top: 50 })
+
+let  plugin : GysdkFlutterPlugin =   EntryAbility.getInstanse()?.getFlutterEngine()?.getPlugins()?.get(new GysdkFlutterPlugin().getUniqueClassName()) as GysdkFlutterPlugin
+plugin.config = this.config
+}
+
+```
+
+#### 配置 `module.json5`
+在项目中配置：
+```yaml
+    "requestPermissions": [
+      {"name" :  "ohos.permission.INTERNET"},
+    ],
+    "metadata": [
+      {
+        "name": "GETUI_APPID",
+        "value": '你的appid',
+      },
+      {
+        "name": "GT_INSTALL_CHANNEL",
+        "value": 'CHANNEL'
+      }]
+}
+```
+
+
 
 
 #  3、使用
@@ -142,11 +216,17 @@ Gyflut().login();
 
 https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
 
-![demo](demo.png)
+![demo.png](demoImg/demo.png)
 
 
-### 3.2 IOS demo
+### 3.3 IOS demo
 
 https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
 
-![demo](iosDemo.png)
+![demo](demoImg/iosDemo.png)
+
+
+### 3.4 ohos demo
+
+https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
+![ohos.jpeg](demoImg/ohos.jpeg)

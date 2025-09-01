@@ -1,6 +1,6 @@
 name: gyflut
 description: gy flutter plugin
-version: 0.0.7
+version: 0.0.8
 homepage: https://www.getui.com
 
 environment:
@@ -15,7 +15,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -33,6 +32,9 @@ flutter:
         pluginClass: GysdkFlutterPlugin
       ios:
         pluginClass: GysdkFlutterPlugin
+      ohos:
+        pluginClass: GysdkFlutterPlugin
+
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

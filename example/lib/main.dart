@@ -25,15 +25,17 @@ class _MyAppState extends State<MyApp> {
   String _isPreLoginResultValid = 'Unknown';
   String _getPreLoginResult = 'Unknown';
   String _loginResult = 'Unknown';
+  final gyflut = Gyflut();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+
   }
 
   void _getPreLoginResultValid() async {
-    bool? isPreLoginResultValid = await Gyflut().isPreLoginResultValid();
+    bool? isPreLoginResultValid = await gyflut.isPreLoginResultValid();
     setState(() {
       _isPreLoginResultValid = isPreLoginResultValid.toString();
     });
@@ -41,7 +43,7 @@ class _MyAppState extends State<MyApp> {
 
   void _getPreLoginResultMethod() async {
     Map<dynamic, dynamic>? getPreLoginResult =
-        await Gyflut().getPreLoginResult();
+    await gyflut.getPreLoginResult();
     setState(() {
       _getPreLoginResult = getPreLoginResult.toString();
     });
@@ -54,8 +56,10 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
+      print("Gyflut.platformVersion ");
       platformVersion =
-          await Gyflut.platformVersion ?? 'Unknown platform version';
+          await gyflut.platformVersion ?? 'Unknown platform version';
+      print("Gyflut.platformVersion "+platformVersion);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -68,11 +72,12 @@ class _MyAppState extends State<MyApp> {
       _platformVersion = platformVersion;
     });
 
-    Gyflut().addEventHandler(
+    gyflut.addEventHandler(
       initGySdkCallBack: (Map<String, dynamic> msg) async {
         print("flutter initGySdkCallBack: $msg");
         setState(() {
           _initGySdkResult = msg["msg"];
+
         });
       },
       preloginCallback: (Map<String, dynamic> msg) async {
@@ -83,6 +88,8 @@ class _MyAppState extends State<MyApp> {
       },
       loginCallBack: (Map<String, dynamic> msg) async {
         print("flutter loginCallback: $msg");
+        //关闭鸿蒙一件登录的弹框
+        gyflut.closeAuthLoginPage();
         setState(() {
           _loginResult = msg["msg"];
         });
@@ -100,71 +107,72 @@ class _MyAppState extends State<MyApp> {
             body: ListView(children: <Widget>[
               Container(
                   child: Column(children: <Widget>[
-                Text('Running on: $_platformVersion\n'),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          /// preLoginUseCache:预登录是否使用缓存，默认为true
-                          /// debug:是否开启SDK的debug模式，默认false
-                          /// operatorDebug:是否开启运营商的debug模式，默认false
-                          /// appId: appid（ios)
-                          /// preLoginTimeout: 预登录超时时长（ios)
-                          /// eloginTimeout:登录超时时长（ios)
-                          Gyflut().initGySdk(
-                              true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
-                        },
-                        child: const Text('初始化'),
-                      ),
-                      Expanded(child: Text('  $_initGySdkResult')),
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Gyflut().ePreLogin();
-                        },
-                        child: const Text('预登录'),
-                      ),
-                      Expanded(child: Text('  $_preLoginResult')),
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: _getPreLoginResultValid,
-                        child: const Text('预登录是否有效'),
-                      ),
-                      Expanded(child: Text('  $_isPreLoginResultValid')),
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: _getPreLoginResultMethod,
-                        child: const Text('预登录信息'),
-                      ),
-                      Expanded(child: Text('  $_getPreLoginResult')),
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Gyflut().login();
-                        },
-                        child: const Text('login'),
-                      ),
-                      Expanded(child: Text(' $_loginResult')),
-                    ]),
-              ]))
+                    Text('Running on: $_platformVersion\n'),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              /// preLoginUseCache:预登录是否使用缓存，默认为true
+                              /// debug:是否开启SDK的debug模式，默认false
+                              /// operatorDebug:是否开启运营商的debug模式，默认false
+                              /// appId: appid（ios)
+                              /// preLoginTimeout: 预登录超时时长（ios)
+                              /// eloginTimeout:登录超时时长（ios)
+                              gyflut.initGySdk(
+                                  true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
+                            },
+                            child: const Text('初始化'),
+                          ),
+                          Expanded(child: Text('  $_initGySdkResult')),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              gyflut.ePreLogin();
+                            },
+                            child: const Text('预登录'),
+                          ),
+                          Expanded(child: Text('  $_preLoginResult')),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: _getPreLoginResultValid,
+                            child: const Text('预登录是否有效'),
+                          ),
+                          Expanded(child: Text('  $_isPreLoginResultValid')),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: _getPreLoginResultMethod,
+                            child: const Text('预登录信息'),
+                          ),
+                          Expanded(child: Text('  $_getPreLoginResult')),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              gyflut.login();
+
+                            },
+                            child: const Text('login'),
+                          ),
+                          Expanded(child: Text(' $_loginResult')),
+                        ]),
+                  ]))
             ])));
   }
 }

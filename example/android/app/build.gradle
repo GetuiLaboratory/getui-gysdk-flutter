@@ -1,56 +1,41 @@
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
 }
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-apply plugin: 'com.android.application'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    namespace "com.getui.gy.gysdk_flutter_plugin_example"
+    compileSdk 36
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"  // 修改这里：使用赋值语法而不是方法调用
     }
 
     defaultConfig {
-
         applicationId "com.gt.demo"
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        minSdk flutter.minSdkVersion
+        targetSdk flutter.targetSdkVersion
+        versionCode flutter.versionCode
+        versionName flutter.versionName
+
         manifestPlaceholders = [
-                GETUI_APPID         : "自己填",//请填写开发者在 https://dev.getui.com/ 申请的GETUI_APPID
-                GT_INSTALL_CHANNEL: "flutter",//请填写开发者需要的channel
+                GETUI_APPID         : "自己填",
+                GT_INSTALL_CHANNEL: "flutter",
         ]
     }
-
     signingConfigs {
         myConfig {
-            storeFile file("自己填")//请换成开发者自己的签名配置
+            storeFile file("../getui_demo.keystore")
             keyAlias '自己填'
             keyPassword '自己填'
-            storeFile file('../自己填')
             storePassword '自己填'
         }
     }
@@ -63,8 +48,8 @@ android {
         }
 
         release {
-            zipAlignEnabled true     //Zipalign优化
-            shrinkResources true    // 移除无用的resource文件
+            zipAlignEnabled true
+            shrinkResources true
             minifyEnabled true
             signingConfig signingConfigs.myConfig
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -73,12 +58,11 @@ android {
 }
 
 flutter {
-    source '../..'
+    source "../.."
 }
+
 dependencies {
-    //-----集成个验SDK-----
-    // 个推基础库
-    implementation 'com.getui:gtc:3.2.1.0'
-    // 个验sdk
-    implementation 'com.getui:gysdk:3.1.0.0'
+    implementation 'com.getui:gysdk:3.2.0.0'
+    //个推公共库，如已接其他个推sdk则保留一个最高版本即可
+    implementation 'com.getui:gtc:3.2.18.0'
 }

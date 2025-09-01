@@ -87,7 +87,6 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         public void handleMessage(Message msg) {
             Log.d(TAG,"msg.what : "+ msg.what);
 
-
             switch (msg.what) {
                 case FLUTTER_CALL_BACK_PRELOGIN:
                    channel.invokeMethod("preloginCallback", msg.obj);
@@ -164,7 +163,6 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         boolean resultValid = GYManager.getInstance().isPreLoginResultValid();
         HashMap<String, Object> map = new HashMap<>();
         map.put("isPreLoginResultValid", resultValid);
-
         return resultValid;
     }
 
@@ -192,7 +190,7 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         }
 
         map.put("slogan", slogan);
-
+        map.put("platform", "android");
         return map;
     }
 
@@ -206,6 +204,7 @@ public class GysdkFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         map.put("gyuid", response.getGyuid());
         map.put("operator", response.getOperator());
         map.put("result", response.toString());
+        map.put("platform", "android");
 
         Message msg = Message.obtain();
         msg.what = flutterType;

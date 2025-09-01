@@ -19,3 +19,5 @@ isPreLoginResultValid 、 getPreLoginResult 返回值变换
 ## 0.0.7
 Android增加getPreLoginResult slogan , 
 
+## 0.0.8
+支持ohos
