@@ -103,7 +103,9 @@ allprojects {
 
 
 ## 2.3 ohos配置
-* 使用鸿蒙定制版 Flutter，下载地址: [OpenHarmony Flutter](https://gitcode.com/openharmony-tpc/flutter_flutter) 及 [使用教程](https://developer.huawei.com/consumer/cn/blog/topic/03178381351651116)。
+*  引入插件, 见上文
+* 使用鸿蒙定制版 Flutter，否则报错依赖缺失, 下载地址: [OpenHarmony Flutter](https://gitcode.com/openharmony-tpc/flutter_flutter) 及 [使用教程](https://developer.huawei.com/consumer/cn/blog/topic/03178381351651116)。
+* [启动应用教程](https://gitcode.com/openharmony-tpc/flutter_flutter#%E6%9E%84%E5%BB%BA%E6%AD%A5%E9%AA%A4)
 
 ### 2.3.1 build-profile.json5配置
  ohos工程兼容字节码包、配置正确的签名信息,在项目级build-profile.json5:
@@ -175,30 +177,7 @@ plugin.config = this.config
 ```
 
 ### 2.3.4 插件注册
-
-```yaml
-import { FlutterEngine, Log } from '@ohos/flutter_ohos';
-import GysdkFlutterPlugin from 'gyflut';
-
-const TAG = "GeneratedPluginRegistrant";
-
-export class GeneratedPluginRegistrant {
-
-    static registerWith(flutterEngine: FlutterEngine) {
-      try {
-        flutterEngine.getPlugins()?.add(new GysdkFlutterPlugin());
-      } catch (e) {
-          Log.e(TAG,
-          "Tried to register plugins with FlutterEngine ("
-          + flutterEngine
-          + ") failed.");
-          Log.e(TAG, "Received exception while registering", e);
-      }
-    }
-}
-
-```
-
+运行 fvm flutter build hap 后自动生成 GeneratedPluginRegistrant
 
 #  3、使用
 
