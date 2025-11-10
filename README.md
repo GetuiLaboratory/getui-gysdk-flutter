@@ -104,8 +104,9 @@ allprojects {
 
 ## 2.3 ohos配置
 * 使用鸿蒙定制版 Flutter，下载地址: [OpenHarmony Flutter](https://gitcode.com/openharmony-tpc/flutter_flutter) 及 [使用教程](https://developer.huawei.com/consumer/cn/blog/topic/03178381351651116)。
-* ohos工程需要兼容字节码包,在项目级build-profile.json5:
-* ohos工程需要配置正确的签名信息,在项目级build-profile.json5:
+
+### 2.3.1 build-profile.json5配置
+ ohos工程兼容字节码包、配置正确的签名信息,在项目级build-profile.json5:
 ```yaml
     "products": [
       {
@@ -121,8 +122,8 @@ allprojects {
       }
     ],
 ```
-## 2.4 ohos UI配置
-ohos需要原生UI的配置项,参考demo中Index.ets 和 EntryAbility.ets
+### 2.3.2 ohos UI配置
+ohos需要原生UI的配置项,参考[demo](https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ohos)中Index.ets 和 EntryAbility.ets
 
 ```dart
 //--------------entryAbility类-------------------
@@ -155,7 +156,7 @@ plugin.config = this.config
 
 ```
 
-#### 配置 `module.json5`
+### 2.3.3 配置 `module.json5`
 在项目中配置：
 ```yaml
     "requestPermissions": [
@@ -173,7 +174,30 @@ plugin.config = this.config
 }
 ```
 
+### 2.3.4 插件注册
 
+```yaml
+import { FlutterEngine, Log } from '@ohos/flutter_ohos';
+import GysdkFlutterPlugin from 'gyflut';
+
+const TAG = "GeneratedPluginRegistrant";
+
+export class GeneratedPluginRegistrant {
+
+    static registerWith(flutterEngine: FlutterEngine) {
+      try {
+        flutterEngine.getPlugins()?.add(new GysdkFlutterPlugin());
+      } catch (e) {
+          Log.e(TAG,
+          "Tried to register plugins with FlutterEngine ("
+          + flutterEngine
+          + ") failed.");
+          Log.e(TAG, "Received exception while registering", e);
+      }
+    }
+}
+
+```
 
 
 #  3、使用
@@ -217,19 +241,18 @@ Gyflut().closeAuthLoginPage()
 
 ### 3.2 Android demo
 
-https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
+https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/android
 
 ![demo.png](demoImg/demo.png)
 
 
 ### 3.3 IOS demo
-
-https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
+https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ios
 
 ![demo](demoImg/iosDemo.png)
 
 
 ### 3.4 ohos demo
 
-https://github.com/GetuiLaboratory/getui-flutter-plugin/tree/master/example
+https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ohos
 ![ohos.jpeg](demoImg/ohos.jpeg)
