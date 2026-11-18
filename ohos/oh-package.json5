@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@getui/gysdk": "file:./libs/GY-HM-1.0.8.har"
+    "@getui/gysdk": "file:./libs/GY-HM-1.1.1_20260914.har"
   }
 }

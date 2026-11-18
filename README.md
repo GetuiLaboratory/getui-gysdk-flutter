@@ -9,7 +9,7 @@ Pub.dev: https://pub.dev/packages/gyflut
 
 ```yaml
 dependencies:
-  gyflut: ^0.0.8
+  gyflut: ^0.0.9
 ```
 
 
@@ -107,6 +107,15 @@ allprojects {
 * 使用鸿蒙定制版 Flutter，否则报错依赖缺失, 下载地址: [OpenHarmony Flutter](https://gitcode.com/openharmony-tpc/flutter_flutter) 及 [使用教程](https://developer.huawei.com/consumer/cn/blog/topic/03178381351651116)。
 * [启动应用教程](https://gitcode.com/openharmony-tpc/flutter_flutter#%E6%9E%84%E5%BB%BA%E6%AD%A5%E9%AA%A4)
 
+首次构建示例，或移动、更换 Flutter SDK 后，请先在 `example` 目录下用鸿蒙版 Flutter 执行：
+
+```sh
+flutter pub get
+flutter build hap --debug
+```
+
+确认 `flutter --version` 显示鸿蒙定制版（本示例验证使用 `3.22.1-ohos-1.0.4`），再用 DevEco Studio 打开 `example/ohos`。如果遇到 `Cannot find module 'flutter-hvigor-plugin'`，用上述命令重新生成依赖：`flutter build hap` 会从当前 Flutter SDK 安装 Hvigor 插件，单独运行 `ohpm install` 不会安装它。
+
 ### 2.3.1 build-profile.json5配置
  ohos工程兼容字节码包、配置正确的签名信息,在项目级build-profile.json5:
 ```yaml
@@ -124,39 +133,33 @@ allprojects {
       }
     ],
 ```
-### 2.3.2 ohos UI配置
-ohos需要原生UI的配置项,参考[demo](https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ohos)中Index.ets 和 EntryAbility.ets
+### 2.3.2 OHOS 登录页面
 
-```dart
-//--------------entryAbility类-------------------
- private  static  entryAbility :EntryAbility|null
+登录按钮、加载状态和结果提示可由 Flutter 实现。个验 SDK 调用仍需要归属当前 ArkUI 页面树的 `CustomDialogController`，由插件的 `GyLoginDialogHost` 创建和管理。
 
-  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
-    EntryAbility.entryAbility = this
-    super.onCreate(want, launchParam)
-  }
+在 [Index.ets](example/ohos/entry/src/main/ets/pages/Index.ets) 中，从当前页面的 FlutterEngine 取出已注册的插件实例，在 `FlutterPage` 旁挂载宿主组件：
 
-    public  static  getInstanse(): EntryAbility|null {
-       return EntryAbility.entryAbility
-    }
+```typescript
+import GysdkFlutterPlugin, { GyLoginDialogHost } from 'gyflut'
+import EntryAbility from '../entryability/EntryAbility'
 
-    onDestroy(): void {
-      super.onDestroy()
-      EntryAbility.entryAbility = null
-    }
-//----------------Index类-----------------
-private readonly  dialogController: CustomDialogController //省略 ......
+// 以下是 Index 组件中的关键成员。viewId 沿用 Flutter 页面模板。
+private plugin: GysdkFlutterPlugin | null = null
 
 aboutToAppear(): void {
-//使用弹框模式
-//this.config.setWindowMode(this.dialogController)
-//this.config.setLogoMargin({ top: 50 })
-
-let  plugin : GysdkFlutterPlugin =   EntryAbility.getInstanse()?.getFlutterEngine()?.getPlugins()?.get(new GysdkFlutterPlugin().getUniqueClassName()) as GysdkFlutterPlugin
-plugin.config = this.config
+  const plugin = EntryAbility.getInstanse()?.getFlutterEngine()?.getPlugins()?.get('gyflut')
+  this.plugin = plugin instanceof GysdkFlutterPlugin ? plugin : null
 }
 
+build() {
+  Column() {
+    FlutterPage({ viewId: this.viewId })
+    GyLoginDialogHost({ plugin: this.plugin })
+  }
+}
 ```
+
+不要另建插件实例，也不需要在 `Index.ets` 中创建或设置弹窗控制器。当前 Engine 的注册方式见 [EntryAbility.ets](example/ohos/entry/src/main/ets/entryability/EntryAbility.ets)。
 
 ### 2.3.3 配置 `module.json5`
 在项目中配置：
@@ -177,7 +180,8 @@ plugin.config = this.config
 ```
 
 ### 2.3.4 插件注册
-运行 fvm flutter build hap 后自动生成 GeneratedPluginRegistrant
+
+使用鸿蒙版 Flutter 构建 HAP 时会自动生成 `GeneratedPluginRegistrant`。在 `EntryAbility.configureFlutterEngine()` 中保留 `GeneratedPluginRegistrant.registerWith(flutterEngine)`。
 
 #  3、使用
 
@@ -188,6 +192,8 @@ import 'package:gyflut/gyflut.dart';
 ## 3.1 API
 
 ```dart
+final gyflut = Gyflut();
+
 /**
 * 初始化
 * preLoginUseCache:预登录是否使用缓存，默认为true
@@ -197,23 +203,20 @@ import 'package:gyflut/gyflut.dart';
 * preLoginTimeout: 预登录超时时长（ios)
 * eloginTimeout:登录超时时长（ios)
 */
-Gyflut().initGySdk( true, true, false, "5xpxEg5qvI9PNGH2kQAia2");
+gyflut.initGySdk(true, true, false, '你的 iOS AppID');
 
 
 //预登录
- Gyflut().ePreLogin();
+gyflut.ePreLogin();
 
 //预登录是否有效
- bool? isPreLoginResultValid = await Gyflut().isPreLoginResultValid();
+bool? isPreLoginResultValid = await gyflut.isPreLoginResultValid();
 
 //预登录信息
-Map<dynamic, dynamic>? getPreLoginResult = await Gyflut().getPreLoginResult();
+Map<dynamic, dynamic>? getPreLoginResult = await gyflut.getPreLoginResult();
 
 //登录
-Gyflut().login();
-
-//关闭弹框(仅ohos)
-Gyflut().closeAuthLoginPage()
+gyflut.login();
 ```
 
 
@@ -233,5 +236,22 @@ https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ios
 
 ### 3.4 ohos demo
 
-https://github.com/GetuiLaboratory/getui-gysdk-flutter/tree/main/example/ohos
+[Flutter 示例](example/lib/main.dart)使用同一个 `Gyflut` 实例，先注册回调，再由按钮分别调用初始化、预登录和登录。等待初始化成功后再预登录，根据回调结果继续登录。
+
+```dart
+final gyflut = Gyflut();
+gyflut.addEventHandler(
+  initGySdkCallBack: (event) async { /* 更新初始化状态 */ },
+  preloginCallback: (event) async { /* 更新预登录状态 */ },
+  loginCallBack: (event) async { /* 更新登录状态 */ },
+);
+
+// 分别绑定到三个按钮，不要在初始化发出后立即调用后两项。
+void onInitPressed() => gyflut.initGySdk(true, false, false);
+void onPreLoginPressed() => gyflut.ePreLogin();
+void onLoginPressed() => gyflut.login();
+```
+
+OHOS 的 `ePreLogin([timeout])` 和 `login([timeout])` 使用毫秒，默认和最小值都是 `5000`。本示例使用无可见原生弹窗的登录方式，回调中无需调用 `closeAuthLoginPage()`。
+
 ![ohos.jpeg](demoImg/ohos.jpeg)

@@ -30,8 +30,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    registerGyflutCallbacks();
     initPlatformState();
-
   }
 
   void _getPreLoginResultValid() async {
@@ -72,29 +72,38 @@ class _MyAppState extends State<MyApp> {
       _platformVersion = platformVersion;
     });
 
+  }
+
+  void registerGyflutCallbacks() {
     gyflut.addEventHandler(
       initGySdkCallBack: (Map<String, dynamic> msg) async {
-        print("flutter initGySdkCallBack: $msg");
+        if (!mounted) return;
         setState(() {
-          _initGySdkResult = msg["msg"];
-
+          _initGySdkResult = _callbackStatus(msg);
         });
       },
       preloginCallback: (Map<String, dynamic> msg) async {
-        print("flutter preloginCallback: $msg");
+        if (!mounted) return;
         setState(() {
-          _preLoginResult = msg["msg"];
+          _preLoginResult = _callbackStatus(msg);
         });
       },
       loginCallBack: (Map<String, dynamic> msg) async {
-        print("flutter loginCallback: $msg");
-        //关闭鸿蒙一件登录的弹框
-        gyflut.closeAuthLoginPage();
+        if (!mounted) return;
         setState(() {
-          _loginResult = msg["msg"];
+          _loginResult = _callbackStatus(msg);
         });
       },
     );
+  }
+
+  String _callbackStatus(Map<String, dynamic> event) {
+    final code = event['code'];
+    final isSuccess = event['isSuccess'];
+    if (isSuccess is bool) {
+      return '${isSuccess ? '成功' : '失败'}（code: $code）';
+    }
+    return code?.toString() ?? event['msg']?.toString() ?? '已收到回调';
   }
 
   @override
@@ -166,9 +175,8 @@ class _MyAppState extends State<MyApp> {
                           ElevatedButton(
                             onPressed: () {
                               gyflut.login();
-
                             },
-                            child: const Text('login'),
+                            child: const Text('一键登录'),
                           ),
                           Expanded(child: Text(' $_loginResult')),
                         ]),

@@ -21,3 +21,6 @@ Android增加getPreLoginResult slogan ,
 
 ## 0.0.8
 支持ohos
+
+## 0.0.9
+支持ohos一键登录
